@@ -8,7 +8,9 @@ $(document).ready(function() {
       $window = $(window);
 
   function resizeFirstPage() {
-    $pages.filter('#first-page').height($window.height());
+    var newHeight = $window.height(),
+        $firstPage = $pages.filter('#first-page');
+    $firstPage.height(newHeight);
   }
 
   /**
@@ -37,14 +39,15 @@ $(document).ready(function() {
     });
   }
   
-  $window.bind('load resize', function(event) {
-    var newHeight = $window.height();
+  $window.bind('load', function(event) {
     resizeFirstPage();
+  });
+  $window.bind('load resize', function(event) {
     repositionVC();
+  });
 
-    if (event.type === "load") {
-      skr = skrollr.init();
-    }
+  $window.bind('resize', function(event) {
+    skr = skrollr.init();
   });
 
   // Remove the pre mask
