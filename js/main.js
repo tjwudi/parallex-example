@@ -5,12 +5,19 @@ $(document).ready(function() {
   // Size the height of all page sections to
   // the height of the initial viewport
   var $pages = $('section[id*="-page"]'),
+      $firstPage = $pages.filter('#first-page'),
+      $secondPage = $pages.filter('#second-page'),
+      $logoWrapper = $firstPage.find('.logo-wrapper'),
       $window = $(window);
 
   function resizeFirstPage() {
-    var newHeight = $window.height(),
-        $firstPage = $pages.filter('#first-page');
+    var newHeight = $window.height();
     $firstPage.height(newHeight);
+    $secondPage.css('margin-top', newHeight);
+    $logoWrapper.width($window.width());
+    $window.on('resize', function(event) {
+      $logoWrapper.width($window.width());
+    });
   }
 
   /**
@@ -41,14 +48,14 @@ $(document).ready(function() {
   
   $window.bind('load', function(event) {
     resizeFirstPage();
-  });
-  $window.bind('load resize', function(event) {
     repositionVC();
   });
 
-  $window.bind('resize', function(event) {
-    skr = skrollr.init();
-  });
+  // Initialize the parallex effect for the iphone :)
+  $parallexImg = $('.parallex-img:first');
+  $parallexImg.css('top', $window.height());
+  $parallexImg.attr('data-' + 0 + '-start', 'margin-top: -20px;');
+  $parallexImg.attr('data-' + $window.height() + '-start', 'margin-top: -80px;');
 
   // Remove the pre mask
   var $body = $(document.body),
@@ -60,4 +67,6 @@ $(document).ready(function() {
     $main.removeClass('hidden');
   }, 800);
 
+  // init skrollr
+  skr = skrollr.init();
 });
